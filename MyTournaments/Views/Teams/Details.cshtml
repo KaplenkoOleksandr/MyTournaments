@@ -1,0 +1,35 @@
+﻿@model MyTournaments.Team
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Team</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Game)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Game.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sponsor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sponsor.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a href='javascript:history.go(-1)'>Back to List</a>
+</div>

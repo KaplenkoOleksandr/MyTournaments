@@ -1,0 +1,47 @@
+﻿@model MyTournaments.Player
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+    <h1>Create</h1>
+
+<h4>Player</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Position" class="control-label"></label>
+                <input asp-for="Position" class="form-control" />
+                <span asp-validation-for="Position" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Info" class="control-label"></label>
+                <input asp-for="Info" class="form-control" />
+                <span asp-validation-for="Info" class="text-danger"></span>
+            </div>
+
+            <input type="hidden" value="@ViewBag.teamId" name="TeamId" />
+            <input type="hidden" value="@ViewBag.gameId" name="gameId" />
+            <input type="hidden" value="@ViewBag.gameName" name="gameName" />
+
+            <div class="form-group">
+                <label asp-for="EntranceDate" class="control-label"></label>
+                <input asp-for="EntranceDate" type="date" class="form-control" />
+                <span asp-validation-for="EntranceDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<button class="menubuttons backtolist-button" onclick="location.href='javascript:history.go(-1)'">Back to List</button>

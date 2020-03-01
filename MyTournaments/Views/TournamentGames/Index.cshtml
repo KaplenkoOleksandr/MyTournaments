@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MyTournaments.TournamentGames>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <h1>@ViewBag.gameName Tournaments</h1>
+
+    <p>
+        <button class="menubuttons crete-button" onclick="location.href = '@Url.Action("Create", new { gameId = @ViewBag.gameId, gameName = @ViewBag.gameName })'">Add Tournament</button>
+        <button class="menubuttons back-button" onclick="location.href = '@Url.Action("Index", "Games")'">Back</button>
+
+    </p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Tournamet.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tournamet.Sponsor.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tournamet.Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tournamet.PrizeFund)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tournamet.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tournamet.Sponsor.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tournamet.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tournamet.PrizeFund)
+            </td>
+            <td>
+                <button class="menubuttons delete-button" onclick="location.href = '@Url.Action("Delete", new { id = item.Id })'">Delete</button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
