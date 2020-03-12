@@ -34,17 +34,7 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Sponsor.Name)
         </dd>
-        <dd class="col-sm-10">
-            <ul>
-                @foreach (var gn in ViewData["GameName"] as IList<string>)
-                {
-                    <li>
-                        @Html.ActionLink(@gn, "MyIndex", "Games" ,new { gameName = @gn});
-                    </li>
-                }
-            </ul>
-        </dd>
-    </dl>
+        </dl>
 </div>
 <div>
     <button class="menubuttons backtolist-button" onclick="location.href='javascript:history.go(-1)'">Back to List</button>

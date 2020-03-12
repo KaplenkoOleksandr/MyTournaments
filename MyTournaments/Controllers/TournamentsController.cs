@@ -38,7 +38,9 @@ namespace MyTournaments.Controllers
             var tornbygame = from tbg in _context.TournamentGames
                              where tbg.TournametId == tournament.Id
                              select tbg;
+
             List<string> namesgames = new List<string>();
+
             foreach(var tbg in tornbygame)
             {
                 var gamename = from gn in _context.Game

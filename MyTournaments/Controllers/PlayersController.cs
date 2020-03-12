@@ -67,15 +67,23 @@ namespace MyTournaments.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int teamId, int gameId, string gameName, [Bind("Id,Name,Position,Info,EntranceDate")] Player player)
         {
-            if(gameName == null) return RedirectToAction("Index", "Home");
-            player.TeamId = teamId;
-            if (ModelState.IsValid)
+            if (player.EntranceDate > DateTime.Now)
             {
-                _context.Add(player);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index","Players", new { id = teamId, gameId, gameName });
+                ModelState.AddModelError("EntranceDate", "jhbfdjnhghnj");
+                return View(player);
             }
-            return RedirectToAction("Index", "Players", new { id = teamId, gameId, gameName });
+            else
+            {
+                if (gameName == null) return RedirectToAction("Index", "Home");
+                player.TeamId = teamId;
+                if (ModelState.IsValid)
+                {
+                    _context.Add(player);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Players", new { id = teamId, gameId, gameName });
+                }
+                return RedirectToAction("Index", "Players", new { id = teamId, gameId, gameName });
+            }
         }
 
         // GET: Players/Edit/5

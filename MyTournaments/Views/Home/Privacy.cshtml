@@ -4,3 +4,51 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+
+<div class="container">
+
+    <div id="chart1"> </div>
+    <div id="chart2"> </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            $.get('/api/TestCharts/JsonData', function (jsonData) {
+                data = google.visualization.arrayToDataTable(jsonData, false);
+                var option = {
+                    title: "Співвідношення кількості Команд та Ігр",
+                    width: 500,
+                    height: 400
+                };
+                chart = new google.visualization.PieChart(document.getElementById('chart1'));
+                chart.draw(data, option);
+            })
+        };
+    </script>
+
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            $.get('/api/TestCharts/JsonData2', function (jsonData) {
+                data = google.visualization.arrayToDataTable(jsonData, false);
+                var option = {
+                    title: "Співвідношення кількості Команд та Гравців",
+                    width: 500,
+                    height: 400
+                };
+                chart = new google.visualization.PieChart(document.getElementById('chart2'));
+                chart.draw(data, option);
+            })
+        };
+    </script>
+
+}

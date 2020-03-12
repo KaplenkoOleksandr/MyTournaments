@@ -64,13 +64,26 @@ namespace MyTournaments.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Info")] Game game)
         {
-            if (ModelState.IsValid)
+            int counter = 0;
+            foreach (var g in _context.Game)
             {
-                _context.Add(game);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (g.Name == game.Name) { counter++; break; }
             }
-            return View(game);
+
+            if (counter != 0)
+            {
+                ModelState.AddModelError("Name", "Таке ім'я вже існує");
+                return View(game);
+            }
+            else {
+                if (ModelState.IsValid)
+                {
+                    _context.Add(game);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(game);
+            }
         }
 
         // GET: Games/Edit/5
@@ -186,4 +199,6 @@ namespace MyTournaments.Controllers
             return _context.Game.Any(e => e.Id == id);
         }
     }
-}
+
+
+    }
