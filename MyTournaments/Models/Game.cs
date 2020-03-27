@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using System.ComponentModel.DataAnnotations;
+
 namespace MyTournaments
 {
     public partial class Game
@@ -12,6 +14,7 @@ namespace MyTournaments
         }
 
         public int Id { get; set; }
+        [Required(ErrorMessage = "!@#$%^&")]
         public string Name { get; set; }
         public string Info { get; set; }
 

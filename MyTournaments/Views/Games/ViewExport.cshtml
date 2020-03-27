@@ -1,0 +1,288 @@
+﻿
+@{
+    ViewData["Title"] = "ViewExport";
+}
+
+<script type="text/javascript">
+    
+    checked = false
+    function checkedAll(allform) {
+        var aa = document.getElementById('allform');
+        if (checked == false) {
+            checked = true
+        }
+        else {
+            checked = false
+        }
+        for (var i = 0; i < aa.elements.length; i++) {
+            if (aa.elements[i].type != "radio") {
+                aa.elements[i].checked = checked;
+            }
+        }
+    }
+    function checkedAllIn(allform, names, id) {
+        var chbox = document.getElementById(id);
+        var aa = document.getElementById('allform');
+        for (var i = 0; i < aa.elements.length; i++) {
+            if (aa.elements[i].name == names) {
+                aa.elements[i].checked = chbox.checked;
+            }
+        }
+    }
+</script>
+
+
+
+<style>
+    input[name="worksheet"],
+    input[name="worksheet"]:not(:checked) + div {
+        display: none;
+    }
+</style>
+
+<div class="cont">
+    <label for="s1">Games</label>
+    <label for="s2">Teams</label>
+    <label for="s3">Players</label>
+    <label for="s4">Sponsors</label>
+    <label for="s5">Tournaments</label>
+    <input type='checkbox' name='checkall' onclick='checkedAll(allform);'>
+</div>
+<div class="map">
+    <form method="post" id="allform" action="~/Teams/Export">
+        <input type="radio" name="worksheet" id="s1" checked="checked" />
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        @foreach (var item in ViewData["GamesModel"] as List<Game>)
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => item.Name)
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Info)
+                            </th>
+                            break;
+                        }
+                        <th>
+                            <input type='checkbox' id="checkallGames" onclick='checkedAllIn(allform, "selectedGames", "checkallGames");'>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewData["GamesModel"] as List<Game>)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Info)
+                            </td>
+                            <td>
+                                <input type="checkbox" name="selectedGames" id="@item.Id" value="@item.Id">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <input type="radio" name="worksheet" id="s2" />
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        @foreach (var item in ViewData["TeamsModel"] as List<Team>)
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => item.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Game)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Sponsor)
+                            </th>
+                            break;
+                        }
+                    <th>
+                        <input type='checkbox' id='checkallTeams' onclick='checkedAllIn(allform, "selectedTeams", "checkallTeams");'>
+                    </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewData["TeamsModel"] as List<Team>)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Game.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sponsor.Name)
+                            </td>
+                            <td>
+                                <input type="checkbox" name="selectedTeams" id="@item.Id" value="@item.Id">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <input type="radio" name="worksheet" id="s3" />
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        @foreach (var item in ViewData["PlayersModel"] as List<Player>)
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => item.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Position)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Info)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.EntranceDate)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Team)
+                            </th>
+                            break;
+                        }
+                    <th>
+                        <input type='checkbox' id='checkallPlayers' onclick='checkedAllIn(allform, "selectedPlayers", "checkallPlayers");'>
+                    </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewData["PlayersModel"] as List<Player>)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Position)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Info)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.EntranceDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Team.Name)
+                            </td>
+                            <td>
+                                <input type="checkbox" name="selectedPlayers" id="@item.Id" value="@item.Id">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <input type="radio" name="worksheet" id="s4" />
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        @foreach (var item in ViewData["SponsorsModel"] as List<Sponsor>)
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => item.Name)
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Info)
+                            </th>
+                            break;
+                        }
+                    <th>
+                        <input type='checkbox' id='checkallSponsors' onclick='checkedAllIn(allform, "selectedSponsors", "checkallSponsors");'>
+                    </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewData["SponsorsModel"] as List<Sponsor>)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Info)
+                            </td>
+                            <td>
+                                <input type="checkbox" name="selectedSponsors" id="@item.Id" value="@item.Id">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <input type="radio" name="worksheet" id="s5" />
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        @foreach (var item in ViewData["TournamentsModel"] as List<Tournament>)
+                        {
+                            <th>
+                                @Html.DisplayNameFor(model => item.Name)
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Location)
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.PrizeFund)
+
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => item.Sponsor)
+
+                            </th>
+                            break;
+                        }
+                    <th>
+                        <input type='checkbox' id='checkallTournaments' onclick='checkedAllIn(allform, "selectedTournaments", "checkallTournaments");'>
+                    </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewData["TournamentsModel"] as List<Tournament>)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Location)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PrizeFund)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Sponsor.Name)
+                            </td>
+                            <td>
+                                <input type="checkbox" name="selectedTournaments" id="@item.Id" value="@item.Id">
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <input type="submit" value="Export" href='@Url.Action("Export", "Teams")' onclick="setTimeout(function(){var ww = window.open(window.location, '_self'); ww.close(); }, 1000);" />
+    </form>
+</div>
+

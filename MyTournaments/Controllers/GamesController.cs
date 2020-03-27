@@ -24,6 +24,16 @@ namespace MyTournaments.Controllers
             return View(await _context.Game.ToListAsync());
         }
 
+        public async Task<IActionResult> ViewExport()
+        {
+            ViewData["GamesModel"] = _context.Game.ToList();
+            ViewData["TeamsModel"] = _context.Team.Include(t => t.Sponsor).ToList();
+            ViewData["PlayersModel"] = _context.Player.ToList();
+            ViewData["SponsorsModel"] = _context.Sponsor.ToList();
+            ViewData["TournamentsModel"] = _context.Tournament.ToList();
+            return View();
+        }
+        
         public async Task<IActionResult> GamesByTournament(int id)
         {
             var g = from l in _context.TournamentGames
@@ -69,7 +79,6 @@ namespace MyTournaments.Controllers
             {
                 if (g.Name == game.Name) { counter++; break; }
             }
-
             if (counter != 0)
             {
                 ModelState.AddModelError("Name", "Таке ім'я вже існує");
@@ -200,5 +209,4 @@ namespace MyTournaments.Controllers
         }
     }
 
-
-    }
+}

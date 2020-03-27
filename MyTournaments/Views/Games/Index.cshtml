@@ -1,5 +1,4 @@
-﻿
-@model IEnumerable<MyTournaments.Game>
+﻿@model IEnumerable<MyTournaments.Game>
 
 @{
     ViewData["Title"] = "Games";
@@ -10,6 +9,14 @@
 <p>
     <button class="menubuttons crete-button" onclick="location.href = '@Url.Action("Create", "Games")'">Create New</button>
     <button class="menubuttons back-button" onclick="location.href = '@Url.Action("Index", "Home")'">Back</button>
+    <button style="background-color:transparent; border:0px; padding:0px;">
+    @using (Html.BeginForm("Import", "Teams", FormMethod.Post, new { enctype = "multipart/form-data", id = "frm-excel" }))
+    {
+            <input style="color:black; border-color:white; border: 2px solid transparent; border-radius:10px;" type="file" name="fileExcel" id="fileExcel" />
+            <input type="submit" style="color:black; border-color:white; border: 2px solid transparent; border-radius:10px;" value="Завантажити" />
+    }
+    </button>
+    <a target="_blank" href = '@Url.Action("ViewExport", "Games")'>Export</a>
 </p>
 <table class="table">
     <thead>
@@ -39,7 +46,6 @@
                     <button class="menubuttons others-button" onclick="location.href = '@Url.Action("Index", "TournamentGames", new { id = item.Id, name = item.Name })'">Tournaments</button>
                     <button class="menubuttons edit-button" onclick="location.href = '@Url.Action("Edit", "Games", new { id = item.Id })'">Edit</button>
                     <button class="menubuttons delete-button" onclick="location.href = '@Url.Action("Delete", "Games", new { id = item.Id })'">Delete</button>
-
                 </td>
             </tr>
         }
@@ -55,39 +61,39 @@
     <script type="text/javascript">
 
         // Load the Visualization API and the corechart package.
-        
+
 
         // Set a callback to run when the Google Visualization API is loaded.
-        
+
 
         // Callback that creates and populates a data table,
         // instantiates the pie chart, passes in the data and
         // draws it.
-        
 
-            // Create the data table.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Topping');
-            data.addColumn('number', 'Slices');
-            data.addRows([
-                ['Mushrooms', 3],
-                ['Onions', 1],
-                ['Olives', 1],
-                ['Zucchini', 1],
-                ['Pepperoni', 2]
-            ]);
 
-            // Set chart options
-            var options = {
-                'title': 'How Much Pizza I Ate Last Night',
-                'width': 400,
-                'height': 300
-            };
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+        data.addRows([
+            ['Mushrooms', 3],
+            ['Onions', 1],
+            ['Olives', 1],
+            ['Zucchini', 1],
+            ['Pepperoni', 2]
+        ]);
 
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
-        }
+        // Set chart options
+        var options = {
+            'title': 'How Much Pizza I Ate Last Night',
+            'width': 400,
+            'height': 300
+        };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+            }
     </script>
 </head>
 

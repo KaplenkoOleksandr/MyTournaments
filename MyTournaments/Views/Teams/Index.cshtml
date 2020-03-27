@@ -7,8 +7,8 @@
     <h1>@ViewBag.gameName Teams</h1>
 
     <p>
-        <button class="menubuttons crete-button" onclick="location.href = '@Url.Action("Create", new { gameId = @ViewBag.gameId })'">Create New</button>
-        <button class="menubuttons back-button" onclick="location.href = '@Url.Action("Index", "Games")'">Back</button>
+        <button class="menubuttons crete-button" onclick="location.href = '@Url.Action("Create", new { gameId = @ViewBag.gameId, gameName=@ViewBag.gameName })'">Create New</button>
+        <button class="menubuttons back-button" onclick="location.href = '@Url.Action("Index", "Games", new { gameId = @ViewBag.gameId})'">Back</button>
     </p>
 <table class="table">
     <thead>
