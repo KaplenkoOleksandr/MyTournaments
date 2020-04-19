@@ -15,8 +15,8 @@ namespace MyTournaments.ViewModel
         public string Email { get; set; }
 
         [Required]
-        [Display(Name = "Birth date")]
-        public int Year { get; set; }
+        [Display(Name = "Name")]
+        public string Name { get; set; }
 
         [Required]
         [Display(Name = "Password")]
@@ -24,7 +24,7 @@ namespace MyTournaments.ViewModel
         public string Password { get; set; }
 
         [Required]
-        [Compare("Password", ErrorMessage = "Зasswords are different")]
+        [Compare("Password", ErrorMessage = "Passwords are different")]
         [Display(Name = "Password confirmation")]
         [DataType(DataType.Password)]
         public string PasswordConfirm { get; set; }

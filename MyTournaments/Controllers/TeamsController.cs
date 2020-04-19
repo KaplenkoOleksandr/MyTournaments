@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Xceed.Document.NET;
+using Xceed.Words.NET;
 
 namespace MyTournaments.Controllers
 {
@@ -62,7 +64,7 @@ namespace MyTournaments.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (fileExcel != null)
+                if (fileExcel != null && fileExcel.FileName.EndsWith(".xlsx"))
                 {
                     using (var stream = new FileStream(fileExcel.FileName, FileMode.Create))
                     {
@@ -567,7 +569,230 @@ namespace MyTournaments.Controllers
                 }
             }
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ExportDocx(List<int> selectedTeams, List<int> selectedPlayers, List<int> selectedGames, List<int> selectedSponsors, List<int> selectedTournaments)
+        {
+            // Create a document.
+            using (DocX document = DocX.Create(@"Test.docx"))
+            {
+                // Create a Table game.
+                Table game = document.AddTable(selectedGames.Count()+1, 2);
+                game.Design = TableDesign.ColorfulGrid;
+                game.Alignment = Alignment.center;
+                int gameCounter = 1;
 
+                game.Rows[0].Cells[0].Paragraphs.First().Append("Game");
+                game.Rows[0].Cells[1].Paragraphs.First().Append("Info");
+
+                foreach (var g in _context.Game)
+                {
+                    for (int i = 0; i < _context.Game.Count(); i++)
+                    {
+                        try
+                        {
+                            if (selectedGames.Contains(g.Id))
+                            {
+                                game.Rows[gameCounter].Cells[0].Paragraphs.First().Append(g.Name);
+                                game.Rows[gameCounter].Cells[1].Paragraphs.First().Append(g.Info);
+
+                                gameCounter++;
+                                selectedGames.Remove(g.Id);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                }
+                
+
+                // Create a Table teams.
+                Table teams = document.AddTable(selectedTeams.Count() + 1, 3);
+                teams.Design = TableDesign.ColorfulList;
+                teams.Alignment = Alignment.center;
+                int teamsCounter = 1;
+
+                teams.Rows[0].Cells[0].Paragraphs.First().Append("Name");
+                teams.Rows[0].Cells[1].Paragraphs.First().Append("Game");
+                teams.Rows[0].Cells[2].Paragraphs.First().Append("Sponsor");
+
+                foreach (var t in _context.Team)
+                {
+                    for (int i = 0; i < _context.Team.Count(); i++)
+                    {
+                        try
+                        {
+                            if (selectedTeams.Contains(t.Id))
+                            {
+                                string GameName = _context.Game.Where(c => c.Id == t.GameId).FirstOrDefault().Name;
+                                if (GameName == null) { throw new Exception(); }
+                                List<Sponsor> sponsor = _context.Sponsor.Where(c => c.Id == t.SponsorId).ToList();
+                                string sponsorName;
+                                if (sponsor.Count() == 0) { sponsorName = ""; }
+                                else { sponsorName = sponsor[0].Name; }
+
+                                teams.Rows[teamsCounter].Cells[0].Paragraphs.First().Append(t.Name);
+                                teams.Rows[teamsCounter].Cells[1].Paragraphs.First().Append(GameName);
+                                teams.Rows[teamsCounter].Cells[2].Paragraphs.First().Append(sponsorName);
+
+                                teamsCounter++;
+                                selectedTeams.Remove(t.Id);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                }
+               
+
+                // Create a Table players.
+                Table players = document.AddTable(selectedPlayers.Count() + 1, 6);
+                players.Design = TableDesign.ColorfulShading;
+                players.Alignment = Alignment.center;
+                int playersCounter = 1;
+
+                players.Rows[0].Cells[0].Paragraphs.First().Append("Name");
+                players.Rows[0].Cells[1].Paragraphs.First().Append("Position");
+                players.Rows[0].Cells[2].Paragraphs.First().Append("Info");
+                players.Rows[0].Cells[3].Paragraphs.First().Append("EntranceDate");
+                players.Rows[0].Cells[4].Paragraphs.First().Append("Team");
+                players.Rows[0].Cells[5].Paragraphs.First().Append("Game");
+
+                foreach (var p in _context.Player)
+                {
+                    for (int i = 0; i < _context.Player.Count(); i++)
+                    {
+                        try
+                        {
+                            if (selectedPlayers.Contains(p.Id))
+                            {
+                                string TeamName = _context.Team.Where(c => c.Id == p.TeamId).FirstOrDefault().Name;
+                                if (TeamName == null) { throw new Exception(); }
+                                Team gameId = _context.Team.Where(c => c.Id == p.TeamId).FirstOrDefault();
+                                string GameName = _context.Game.Where(c => c.Id == gameId.GameId).FirstOrDefault().Name;
+                                if (GameName == null) { throw new Exception(); }
+
+                                players.Rows[playersCounter].Cells[0].Paragraphs.First().Append(p.Name);
+                                players.Rows[playersCounter].Cells[1].Paragraphs.First().Append(p.Position);
+                                players.Rows[playersCounter].Cells[2].Paragraphs.First().Append(p.Info);
+                                players.Rows[playersCounter].Cells[3].Paragraphs.First().Append(p.EntranceDate.ToString());
+                                players.Rows[playersCounter].Cells[4].Paragraphs.First().Append(TeamName);
+                                players.Rows[playersCounter].Cells[5].Paragraphs.First().Append(GameName);
+
+                                playersCounter++;
+                                selectedPlayers.Remove(p.Id);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                }
+                
+
+                // Create a Table sponsors.
+                Table sponsors = document.AddTable(selectedSponsors.Count() + 1, 2);
+                sponsors.Design = TableDesign.DarkList;
+                sponsors.Alignment = Alignment.center;
+                int sponsorsCounter = 1;
+
+                sponsors.Rows[0].Cells[0].Paragraphs.First().Append("Name");
+                sponsors.Rows[0].Cells[1].Paragraphs.First().Append("Info");
+
+                foreach (var s in _context.Sponsor)
+                {
+                    for (int i = 0; i < _context.Sponsor.Count(); i++)
+                    {
+                        try
+                        {
+                            if (selectedSponsors.Contains(s.Id))
+                            {
+                                sponsors.Rows[sponsorsCounter].Cells[0].Paragraphs.First().Append(s.Name);
+                                sponsors.Rows[sponsorsCounter].Cells[1].Paragraphs.First().Append(s.Info);
+
+                                sponsorsCounter++;
+                                selectedSponsors.Remove(s.Id);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                }
+                
+
+                // Create a Table tournaments.
+                Table tournaments = document.AddTable(selectedTournaments.Count() + 1, 5);
+                tournaments.Design = TableDesign.DarkListAccent5;
+                tournaments.Alignment = Alignment.center;
+                int tournamentsCounter = 1;
+
+                tournaments.Rows[0].Cells[0].Paragraphs.First().Append("Name");
+                tournaments.Rows[0].Cells[1].Paragraphs.First().Append("Location");
+                tournaments.Rows[0].Cells[2].Paragraphs.First().Append("PrizeFund");
+                tournaments.Rows[0].Cells[3].Paragraphs.First().Append("Sponsor");
+                tournaments.Rows[0].Cells[4].Paragraphs.First().Append("Game");
+
+                foreach (var t in _context.Tournament)
+                {
+                    for (int i = 0; i < _context.Tournament.Count(); i++)
+                    {
+                        try
+                        {
+                            if (selectedTournaments.Contains(t.Id))
+                            {
+                                Sponsor SponsorName = _context.Sponsor.Where(c => c.Id == t.SponsorId).FirstOrDefault();
+
+                                tournaments.Rows[tournamentsCounter].Cells[0].Paragraphs.First().Append(t.Name);
+                                tournaments.Rows[tournamentsCounter].Cells[1].Paragraphs.First().Append(t.Location);
+                                tournaments.Rows[tournamentsCounter].Cells[2].Paragraphs.First().Append(t.PrizeFund.ToString());
+                                tournaments.Rows[tournamentsCounter].Cells[3].Paragraphs.First().Append(SponsorName.Name);
+
+                                string gameString = "";
+                                foreach (var tg in _context.TournamentGames)
+                                {
+                                    if (tg.TournametId == t.Id)
+                                    {
+                                        gameString += _context.Game.Where(c => c.Id == tg.GameId).FirstOrDefault().Name + ",";
+                                    }
+                                }
+                                tournaments.Rows[tournamentsCounter].Cells[4].Paragraphs.First().Append(gameString);
+
+                                tournamentsCounter++;
+                                selectedTournaments.Remove(t.Id);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                }
+                document.InsertTable(game);
+                document.InsertTable(players);
+                document.InsertTable(teams);
+                document.InsertTable(tournaments);
+                document.InsertTable(sponsors);
+
+                using (var stream = new MemoryStream())
+                {
+                    document.SaveAs(stream);
+                    stream.Flush();
+
+                    return new FileContentResult(stream.ToArray(),
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    {
+                        FileDownloadName = $"library_{DateTime.UtcNow.ToShortDateString()}.docx"
+                    };
+                }
+            }
+        }
 
         // GET: Teams/Create
         public IActionResult Create(int gameId)

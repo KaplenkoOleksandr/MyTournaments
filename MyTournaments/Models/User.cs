@@ -4,6 +4,6 @@ namespace MyTournaments.Models
 {
     public class User : IdentityUser
     {
-        public int Year { get; set; }
+        public string Name { get; set; }
     }
 }

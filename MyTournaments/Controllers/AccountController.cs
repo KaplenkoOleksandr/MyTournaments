@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using MyTournaments.Models;
 using MyTournaments.ViewModel;
 using MyTournaments.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyTournaments.Controllers
 {
@@ -27,14 +28,24 @@ namespace MyTournaments.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };
+                User user = new User { Email = model.Email, UserName = model.Email, Name = model.Name };
                 // додаємо користувача
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // установка кукі
-                    await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
+                    await _userManager.AddToRoleAsync(user, "user");
+                    // генерация токена для пользователя
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.Action(
+                        "ConfirmEmail",
+                        "Account",
+                        new { userId = user.Id, code = code },
+                        protocol: HttpContext.Request.Scheme);
+                    EmailService emailService = new EmailService();
+                    await emailService.SendEmailAsync(model.Email, "Confirm your account",
+                        $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
+
+                    return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
                 }
                 else
                 {
@@ -46,7 +57,28 @@ namespace MyTournaments.Controllers
             }
             return View(model);
         }
-        /////////////////////////////////////
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return View("Error");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return View("Error");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            if (result.Succeeded)
+                return RedirectToAction("Index", "Home");
+            else
+                return View("Error");
+        }
+
+
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
@@ -63,7 +95,6 @@ namespace MyTournaments.Controllers
                     await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    // перевіряємо, чи належить URL додатку
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     {
                         return Redirect(model.ReturnUrl);
@@ -85,7 +116,6 @@ namespace MyTournaments.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            // видаляємо аутентифікаційні куки
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }

@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="~/css/style.css" />
 </head>
 <body>
-    <header>
+    <header style="font-family:Pristina; font-size:18px;">
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Tournaments" asp-action="Index">MyTournaments</a>
@@ -19,17 +19,42 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark home" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" target="_blank" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark home" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark home" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark home" asp-controller="Users" asp-action="MyPage">My Page</a>
+                            </li> 
+                        }
                     </ul>
+                </div>
+                <div style="position:relative; float:right">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form method="post" asp-controller="Account" asp-action="Logout">
+                            <input type="submit" value="Sing out" style="border:dashed 0px; background-color:transparent" class="text-dark home exit_enter_registr_buttons"/>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="text-dark home exit_enter_registr_buttons">Sing in</a>
+                        <a asp-controller="Account" asp-action="Register" style="margin-left:7px" class="text-dark home exit_enter_registr_buttons">Registration</a>
+                    }
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container" style="margin-bottom:63px">
+    <div class="container" style="margin-bottom:63px;">
         <main role="main">
             <div>
                 @RenderBody()
@@ -37,7 +62,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer bg-white text-muted">
+    <footer class="border-top footer bg-white text-muted" style="font-family:Pristina; font-size:18px;">
         <div class="container">
             &copy; 2020 - MyTournaments - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>

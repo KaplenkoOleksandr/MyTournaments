@@ -41,15 +41,18 @@
 </style>
 
 <div class="cont">
-    <label for="s1">Games</label>
-    <label for="s2">Teams</label>
-    <label for="s3">Players</label>
-    <label for="s4">Sponsors</label>
-    <label for="s5">Tournaments</label>
-    <input type='checkbox' name='checkall' onclick='checkedAll(allform);'>
+    <label for="s1" class="home">Games</label>
+    <label for="s2" class="home">Teams</label>
+    <label for="s3" class="home">Players</label>
+    <label for="s4" class="home">Sponsors</label>
+    <label for="s5" class="home">Tournaments</label>
+    <label for="exportdocx" class="export_button" style="background-color:rgb(49, 139, 125)">Export(docx)</label>
+    <label for="export" class="export_button">Export(xlsx)</label>
+    <label for="checkall" class="check">check all</label>
+    <input style="float:right; display:none;" type='checkbox' id="checkall" name='checkall' onclick='checkedAll(allform);'>
 </div>
 <div class="map">
-    <form method="post" id="allform" action="~/Teams/Export">
+    <form method="post" id="allform">
         <input type="radio" name="worksheet" id="s1" checked="checked" />
         <div>
             <table class="table">
@@ -107,9 +110,9 @@
                             </th>
                             break;
                         }
-                    <th>
-                        <input type='checkbox' id='checkallTeams' onclick='checkedAllIn(allform, "selectedTeams", "checkallTeams");'>
-                    </th>
+                        <th>
+                            <input type='checkbox' id='checkallTeams' onclick='checkedAllIn(allform, "selectedTeams", "checkallTeams");'>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -157,9 +160,9 @@
                             </th>
                             break;
                         }
-                    <th>
-                        <input type='checkbox' id='checkallPlayers' onclick='checkedAllIn(allform, "selectedPlayers", "checkallPlayers");'>
-                    </th>
+                        <th>
+                            <input type='checkbox' id='checkallPlayers' onclick='checkedAllIn(allform, "selectedPlayers", "checkallPlayers");'>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -205,9 +208,9 @@
                             </th>
                             break;
                         }
-                    <th>
-                        <input type='checkbox' id='checkallSponsors' onclick='checkedAllIn(allform, "selectedSponsors", "checkallSponsors");'>
-                    </th>
+                        <th>
+                            <input type='checkbox' id='checkallSponsors' onclick='checkedAllIn(allform, "selectedSponsors", "checkallSponsors");'>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -253,9 +256,9 @@
                             </th>
                             break;
                         }
-                    <th>
-                        <input type='checkbox' id='checkallTournaments' onclick='checkedAllIn(allform, "selectedTournaments", "checkallTournaments");'>
-                    </th>
+                        <th>
+                            <input type='checkbox' id='checkallTournaments' onclick='checkedAllIn(allform, "selectedTournaments", "checkallTournaments");'>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -282,6 +285,7 @@
                 </tbody>
             </table>
         </div>
-        <input type="submit" value="Export" href='@Url.Action("Export", "Teams")' onclick="setTimeout(function(){var ww = window.open(window.location, '_self'); ww.close(); }, 2000);" />
+        <input type="submit" id="export" style="display: none" asp-action="Export" asp-controller="Teams" onclick="setTimeout(function(){var ww = window.open(window.location, '_self'); ww.close(); }, 2000);" />
+        <input type="submit" id="exportdocx" style="display: none" asp-action="ExportDocx" asp-controller="Teams" onclick="setTimeout(function(){var ww = window.open(window.location, '_self'); ww.close(); }, 2000);" />
     </form>
 </div>

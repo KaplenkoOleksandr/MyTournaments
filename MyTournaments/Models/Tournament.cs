@@ -18,6 +18,7 @@ namespace MyTournaments
         public int? SponsorId { get; set; }
         [Required(ErrorMessage = "!@#$%^&")]
         public string Location { get; set; }
+        [DisplayFormat(DataFormatString = "{0:C0}", ApplyFormatInEditMode = true)]
         public decimal PrizeFund { get; set; }
 
         public virtual Sponsor Sponsor { get; set; }

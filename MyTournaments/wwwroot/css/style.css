@@ -210,6 +210,35 @@ h1 {
         opacity: 1;
     }
 }
+.export_button {
+    border-radius: 10px;
+    background-color: rgba(80, 31, 31, 0.92);
+    color: white;
+    padding: 3px;
+    float:right;
+    margin-right: 5px;
+}
+.export_button:hover {
+    text-decoration: none;
+    color:rgb(207, 207, 207)
+}
+
+.check {
+    color: white;
+    background-color: rgb(61, 109, 1);
+    border-radius: 10px;
+    float: right;
+    padding: 3px;
+    margin-right: 7px;
+}
+    .check:hover {
+        color: rgb(207, 207, 207)
+    }
+
+
+.home:hover {
+    text-decoration: overline;
+}
 
 .delete-button {
     background-color: rgba(223, 118, 99, 0.7);
@@ -377,4 +406,9 @@ h1 {
 
 .bottom {
     transform: rotateX(-90deg) translateZ(100px);
+}
+
+.exit_enter_registr_buttons {
+    font-family: Pristina;
+    font-size: 18px;
 }

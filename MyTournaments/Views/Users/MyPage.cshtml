@@ -1,0 +1,36 @@
+﻿
+@model IEnumerable<MyTournaments.Models.User>
+@{
+    ViewData["Title"] = "Account - ";
+}
+@foreach (var user in Model)
+{
+    if (user.Email == User.Identity.Name)
+    {
+        <div class="enter_block">
+            <h1>Account</h1>
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => user.Name)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => user.Name)
+                </dd>
+
+                <dt class="col-sm-2">
+                    <p>Права</p>
+                </dt>
+                <dd class="col-sm-10">
+                    @if (User.IsInRole("admin"))
+                    {
+                        <p>Адміністратор</p>
+                    }
+                    else
+                    { <p>Користувач</p>}
+                </dd>
+            </dl>
+        </div>
+        <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+        <a class="btn btn-sm btn-primary" asp-action="ChangePassword" asp-route-id="@user.Id">ChangePassword</a>
+    }
+}
