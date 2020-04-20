@@ -144,7 +144,6 @@ button.scroll_down {
         height: 6px;
         margin-left: -40%;
         background: linear-gradient(90deg, rgb(223, 230, 238) 20%, rgba(223, 230, 238, 0.4) 80%);
-        /background: linear-gradient(90deg, rgba(19, 40, 59, 0.30) 30%, rgba(223, 230, 238, 0.4) 70%);
         border-radius: 100%;
         animation: scroll_down_btn-animation 3s infinite;
         box-sizing: border-box;
@@ -371,7 +370,6 @@ h1 {
     width: inherit;
     text-align: center;
     border: 2px solid rgba(116, 122, 141, 0.66);
-    overflow: hidden;
     background-color: rgba(16, 44, 68, 0.7);
 }
 

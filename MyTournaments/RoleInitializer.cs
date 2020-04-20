@@ -8,9 +8,9 @@ namespace MyTournaments
     {
         public static async Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
-            string adminEmail = "admin@gmail.com";
+            string adminEmail = "qqqqqq@gmail.com";
             string adminUserName = "Admin";
-            string password = "Qwerty_1";
+            string password = "123123";
             if (await roleManager.FindByNameAsync("admin") == null)
             {
                 await roleManager.CreateAsync(new IdentityRole("admin"));
@@ -25,7 +25,7 @@ namespace MyTournaments
                 IdentityResult result = await userManager.CreateAsync(admin, password);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(admin, "admin");
+                    await userManager.AddToRoleAsync(admin, "user");
                 }
             }
         }
